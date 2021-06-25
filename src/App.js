@@ -134,7 +134,11 @@ const App = () => {
 
         setArtist(artists[index]);
 
-        artists.splice(index, 1);
+        const newArtists = artists;
+
+        newArtists.splice(index, 1);
+
+        setArtists(newArtists);
     };
 
     const handleCorrect = () => {
