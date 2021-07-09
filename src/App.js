@@ -155,7 +155,7 @@ const App = () => {
         'Taylor Swift',
         'Olivia Rodrigo',
         'Ariana Grande',
-        'The Beatles'.
+        'The Beatles',
         'Shawn Mendes',
         'Cardi B',
     ]);
