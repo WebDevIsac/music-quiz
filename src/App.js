@@ -152,6 +152,12 @@ const App = () => {
         'Fricky',
         'Yasin',
         'Dree Low',
+        'Taylor Swift',
+        'Olivia Rodrigo',
+        'Ariana Grande',
+        'The Beatles'.
+        'Shawn Mendes',
+        'Cardi B',
     ]);
     const [points, setPoints] = useState(0);
 
