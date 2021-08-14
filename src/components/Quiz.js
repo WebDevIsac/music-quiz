@@ -25,7 +25,7 @@ const Points = styled('span')`
 const Reset = styled('div')`
     font-size: 20px;
     color: red;
-margin-bottom: 16px;
+    margin-bottom: 16px;
 `;
 
 const TextBox = styled('div')`
@@ -184,6 +184,8 @@ const App = () => {
     const handleReset = () => {
         setPoints(0);
     };
+
+    // Add start button
 
     return (
         <>
