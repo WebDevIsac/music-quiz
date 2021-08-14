@@ -158,6 +158,8 @@ const App = () => {
         'The Beatles',
         'Shawn Mendes',
         'Cardi B',
+        'Lov1',
+        'Thåström'
     ]);
     const [points, setPoints] = useState(0);
 
