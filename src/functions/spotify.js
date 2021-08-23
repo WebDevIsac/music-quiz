@@ -1,12 +1,14 @@
 const AUTH_TOKEN = process.env.REACT_APP_SPOTIFY_AUTH_TOKEN;
 
 export const getUserPlaylists = async (userId) => {
-    let response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+    let response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists?limit=50`, {
         method: 'GET',
         headers: new Headers({
             'Authorization': `Bearer ${AUTH_TOKEN}`
         })
     });
+
+    return await response.json();
 }
 
 export const getPlaylistArtists = async (playlistIds) => {
