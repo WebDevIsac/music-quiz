@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { Global, css } from '@emotion/react';
-import {  getUserPlaylists} from '../functions/spotify';
+import { authorize, getUserPlaylists} from '../functions/spotify';
 
 const Wrapper = styled('div')`
     width: 100%;
@@ -28,6 +28,10 @@ const App = () => {
 
     };
 
+    const handleAuth = () => {
+        authorize();
+    }
+
     return (
         <>
             <Global styles={css`body { margin: 0; }`} />
@@ -36,6 +40,7 @@ const App = () => {
                     <input value={state.userId} onChange={(e) => setState({ ...state, userId: e.target.value })} />
                     <button type="submit">OK!</button>
                 </form>
+                <div onClick={handleAuth}>AUTHORIZE!</div>
             </Wrapper>
         </>
     );
