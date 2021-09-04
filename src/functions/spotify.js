@@ -1,9 +1,10 @@
-const AUTH_TOKEN = process.env.REACT_APP_SPOTIFY_AUTH_TOKEN;
+const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
 
 export const authorize = async () => {
     const { origin } = window.location;
     window.location.href = 'https://accounts.spotify.com/authorize' + 
-        '?client_id=d705dbf487824c5893594aaa9279f2fb' + 
+        `?client_id=${CLIENT_ID}` + 
         '&response_type=code' + 
         `&redirect_uri=${origin}/authorized` + 
         '&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative' + 
@@ -12,9 +13,7 @@ export const authorize = async () => {
 
 export const getToken = async (code) => {
     const { origin } = window.location;
-    const clientId = 'd705dbf487824c5893594aaa9279f2fb';
-    const clientSecret = 'af84b02c225242468992d977660084e1';
-    var encodedData = window.btoa(clientId + ':' + clientSecret);
+    var encodedData = window.btoa(CLIENT_ID + ':' + CLIENT_SECRET);
 
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -35,9 +34,7 @@ export const getToken = async (code) => {
 };
 
 export const getRefreshToken = async (token) => {
-    const clientId = 'd705dbf487824c5893594aaa9279f2fb';
-    const clientSecret = 'af84b02c225242468992d977660084e1';
-    const encodedData = window.btoa(clientId + ':' + clientSecret);
+    const encodedData = window.btoa(CLIENT_ID + ':' + CLIENT_SECRET);
 
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -64,9 +61,9 @@ export const getUser = async (token) => {
         }),
     });
 
-    const { id } = await response.json();
+    const { id, display_name: name } = await response.json();
 
-    return id;
+    return { id, name };
 }
 
 export const getUserPlaylists = async (token) => {
@@ -76,28 +73,32 @@ export const getUserPlaylists = async (token) => {
             'Authorization': `Bearer ${token}`,
         }),
     });
+
+    const data = await response.json();
+    return data;
 }
 
-export const getUserPlaylistsById = async (userId) => {
+export const getUserPlaylistsById = async (token, userId) => {
     let response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists?limit=50`, {
         method: 'GET',
         headers: new Headers({
-            'Authorization': `Bearer ${AUTH_TOKEN}`
+            'Authorization': `Bearer ${token}`
         })
     });
 
-    return await response.json();
+    const data = await response.json();
+    return data;
 }
 
-export const getPlaylistArtists = async (playlistIds) => {
+export const getPlaylistArtists = async (token, playlistIds) => {
     let artists = await Promise.all(playlistIds.map(async (playlistId) => {
         let response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
             method: 'GET',
             headers: new Headers({
-                'Authorization': `Bearer ${AUTH_TOKEN}`
+                'Authorization': `Bearer ${token}`
             })
         });
 
-
+        console.log(response);
     }))
 }
