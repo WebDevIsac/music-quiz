@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled';
-import { authorize, getRefreshToken, getUser, getUserPlaylists, getUserPlaylistsById } from 'functions/spotify';
+import { getUser, getUserPlaylists, getUserPlaylistsById } from 'functions/spotify';
 import Cookies from 'js-cookie';
 import { checkForToken } from 'functions/utils';
 
@@ -96,12 +96,7 @@ const Frontpage = () => {
                 <button onClick={getPlaylists}>GET MY PLAYLISTS</button>
             )}
         </Wrapper>
-    ) : hasCookie ? <div>LOADING...</div> : (
-        <div>
-            <div>We need you to authorize with your spotify account</div>
-            <button onClick={authorize}>AUTHORIZE</button>
-        </div>
-    )
+    ) : <div>LOADING...</div>;
 }
 
 Frontpage.propTypes = {

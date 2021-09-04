@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Global, css } from '@emotion/react';
 import Frontpage from 'pages/Frontpage';
+import Authorize from 'pages/Authorize';
 import Authorized from 'pages/Authorized';
 import NotFound from 'pages/NotFound';
 
@@ -22,6 +23,9 @@ const App = () => {
                     <Switch>
                         <Route exact path="/">
                             <Frontpage />
+                        </Route>
+                        <Route exact path="/authorize">
+                            <Authorize />
                         </Route>
                         <Route path="/authorized">
                             <Authorized />
