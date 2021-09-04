@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Global, css } from '@emotion/react';
-import { authorize, getUserPlaylists} from '../functions/spotify';
+import Frontpage from 'pages/Frontpage';
+import Authorized from 'pages/Authorized';
+import NotFound from 'pages/NotFound';
 
 const Wrapper = styled('div')`
     width: 100%;
@@ -11,37 +14,24 @@ const Wrapper = styled('div')`
 `;
 
 const App = () => {
-    const [state, setState] = useState({
-        userId: '',
-    });
-    // Save user id as cookie
-    // Save selected playlist ids as cookie
-    // Ask user if we should load earlier given information
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const userPlaylists = await getUserPlaylists(state.userId);
-
-        if (userPlaylists) {
-            setState({ ...state, playlists: userPlaylists });
-        }
-
-    };
-
-    const handleAuth = () => {
-        authorize();
-    }
-
     return (
         <>
             <Global styles={css`body { margin: 0; }`} />
-            <Wrapper>
-                <form onSubmit={handleSubmit}>
-                    <input value={state.userId} onChange={(e) => setState({ ...state, userId: e.target.value })} />
-                    <button type="submit">OK!</button>
-                </form>
-                <div onClick={handleAuth}>AUTHORIZE!</div>
-            </Wrapper>
+            <Router>
+                <Wrapper>
+                    <Switch>
+                        <Route exact path="/">
+                            <Frontpage />
+                        </Route>
+                        <Route path="/authorized">
+                            <Authorized />
+                        </Route>
+                        <Route path="*">
+                            <NotFound />
+                        </Route>
+                    </Switch>
+                </Wrapper>
+            </Router>
         </>
     );
 };
