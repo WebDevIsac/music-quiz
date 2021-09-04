@@ -44,7 +44,7 @@ export const getRefreshToken = async (token) => {
         body: new URLSearchParams({
             'grant_type': 'refresh_token',
             'refresh_token': token,
-        })
+        }),
     });
 
     const data = await response.json();
@@ -66,8 +66,8 @@ export const getUser = async (token) => {
     return { id, name };
 }
 
-export const getUserPlaylists = async (token) => {
-    const response = await fetch('https://api.spotify.com/v1/me/playlists', {
+export const getUserPlaylists = async (token, url = 'https://api.spotify.com/v1/me/playlists') => {
+    const response = await fetch(url, {
         method: 'GET',
         headers: new Headers({
             'Authorization': `Bearer ${token}`,

@@ -35,7 +35,7 @@ const Playlist = styled('div')`
 const Frontpage = () => {
     const [user, setUser] = useState();
     const [token, setToken] = useState();
-    const [playlists, setPlaylists] = useState();
+    const [userPlaylists, setUserPlaylists] = useState();
 
     useEffect(() => {
         const handleAuth = async (token) => {
@@ -69,9 +69,27 @@ const Frontpage = () => {
         }
 
         if (playlistObject) {
-            const { href, items, limit, next, offset, previous, total } = playlistObject;
+            const { href, items, limit, next: nextUrl, offset, previous, total } = playlistObject;
+            const current = limit + offset;
+            
+            setUserPlaylists({items, nextUrl, current, total});
+        }
+    }
 
-            setPlaylists(items);
+    const loadMore = async (userId) => {
+        let playlistObject;
+        if (userId && typeof userId === 'string') {
+            playlistObject = await getUserPlaylistsById(token, userId, userPlaylists.nextUrl);
+        } else {
+            playlistObject = await getUserPlaylists(token, userPlaylists.nextUrl);
+        }
+
+        if (playlistObject) {
+            const { href, items, limit, next: nextUrl, offset, previous, total } = playlistObject;
+            const current = limit + offset;
+            const playlistItems = [...userPlaylists.items, ...items];
+            
+            setUserPlaylists({items: playlistItems, nextUrl, current, total});
         }
     }
 
@@ -80,18 +98,21 @@ const Frontpage = () => {
     return user?.id ? (
         <Wrapper>
             <h2>WELCOME {user.name}</h2>
-            {playlists ? (
-                <Column>
-                    {playlists.map(playlist => {
-                        const image = playlist.images?.[0]?.url;
-                        return (
-                            <Playlist key={playlist.id}>
-                                <img src={image} alt={playlists.name} />
-                                <span>{playlist.name}</span>
-                            </Playlist>
+            {userPlaylists ? (
+                <>
+                    <Column>
+                        {userPlaylists.items.map(playlist => {
+                            const image = playlist.images?.[0]?.url;
+                            return (
+                                <Playlist key={playlist.id}>
+                                    <img src={image} alt={playlist.name} />
+                                    <span>{playlist.name}</span>
+                                </Playlist>
+                            )}
                         )}
-                    )}
-                </Column>
+                    </Column>
+                    {userPlaylists.nextUrl && <button onClick={loadMore}>LOAD MORE...</button>}
+                </>
             ) : (
                 <button onClick={getPlaylists}>GET MY PLAYLISTS</button>
             )}
