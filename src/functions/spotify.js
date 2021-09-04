@@ -79,7 +79,7 @@ export const getUserPlaylists = async (token, url = 'https://api.spotify.com/v1/
 }
 
 export const getUserPlaylistsById = async (token, userId) => {
-    let response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists?limit=50`, {
+    const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists?limit=50`, {
         method: 'GET',
         headers: new Headers({
             'Authorization': `Bearer ${token}`
@@ -91,14 +91,25 @@ export const getUserPlaylistsById = async (token, userId) => {
 }
 
 export const getPlaylistArtists = async (token, playlistIds) => {
-    let artists = await Promise.all(playlistIds.map(async (playlistId) => {
-        let response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+    const artists = await Promise.all(playlistIds.map(async (playlistId) => {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=100`, {
             method: 'GET',
             headers: new Headers({
                 'Authorization': `Bearer ${token}`
             })
         });
 
-        console.log(response);
-    }))
+        const { items } = await response.json();
+
+        const artists = items.map(item => item.track?.artists?.[0]?.name).filter(i => i);
+        
+        return artists;
+    }));
+
+    const combined = artists.reduce((acc, cur) => {
+        const filtered = cur.filter(c => !acc.includes(c));
+        return [...acc, ...filtered];
+    }, []);
+
+    return combined;
 }

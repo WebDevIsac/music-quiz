@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled';
-import { getUser, getUserPlaylists, getUserPlaylistsById } from 'functions/spotify';
+import { getPlaylistArtists, getUser, getUserPlaylists, getUserPlaylistsById } from 'functions/spotify';
 import Cookies from 'js-cookie';
 import { checkForToken } from 'functions/utils';
 
 const Wrapper = styled('div')`
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+    height: auto;
+    width: auto;
     padding: 16px;
 `;
 
@@ -17,14 +17,27 @@ const Column = styled('div')`
     display: flex;
     flex-direction: column;
     font-size: 20px;
+    margin-bottom: 16px;
+`;
+
+const Row = styled('div')`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 `;
 
 const Playlist = styled('div')`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 24px;
-
+    border-right: 1px solid grey;
+    border-bottom: 1px solid grey;
+    width: auto;
+    
+    &:first-of-type {
+        border-top: 1px solid grey;
+    }
+    
     & > img {
         width: 100px;
         height: 100px;
@@ -38,9 +51,13 @@ const Playlist = styled('div')`
 
 const Button = styled('button')`
     width: 100%;
-    max-width: 320px;
     height: 56px;
     min-height: 56px;
+    flex: 1 1 auto;
+
+    & + button {
+        margin-left: 8px;
+    }
 `;
 
 const Frontpage = () => {
@@ -48,6 +65,7 @@ const Frontpage = () => {
     const [token, setToken] = useState();
     const [userPlaylists, setUserPlaylists] = useState();
     const [selectedPlaylistIds, setSelectedPlaylistIds] = useState([]);
+    const [artists, setArtists] = useState([]);
 
     useEffect(() => {
         const handleAuth = async (token) => {
@@ -70,7 +88,7 @@ const Frontpage = () => {
         if (!user) {
             checkAuth();
         }
-    }, []);
+    }, [user]);
 
     const getPlaylists = async (userId) => {
         let playlistObject;
@@ -105,12 +123,21 @@ const Frontpage = () => {
         }
     }
 
-    const selectPlaylist = (id) => {
-        setSelectedPlaylistIds(playlistIds => [...playlistIds, id]);
+    const togglePlaylist = (id, isSelected) => {
+        if (isSelected) {
+            const filteredPlaylists = selectedPlaylistIds.filter(playlistId => playlistId !== id);
+            setSelectedPlaylistIds(filteredPlaylists);
+        } else {
+            setSelectedPlaylistIds(playlistIds => [...playlistIds, id]);
+        }
     }
 
-    const saveSelectedPlaylists = () => {
-        Cookies.set('playlist-ids', setSelectedPlaylistIds, { expires: 5 });
+    const saveSelectedPlaylists = async () => {
+        const stringifiedIds = JSON.stringify(selectedPlaylistIds);
+        Cookies.set('playlist-ids', stringifiedIds, { expires: 5 });
+
+        const playlistArtists = await getPlaylistArtists(token, selectedPlaylistIds);
+        setArtists(playlistArtists);
     }
 
     return user?.id ? (
@@ -123,15 +150,17 @@ const Frontpage = () => {
                             const image = playlist.images?.[0]?.url;
                             const isSelected = selectedPlaylistIds.some(id => id === playlist.id)
                             return (
-                                <Playlist key={playlist.id} className={isSelected ? 'is-selected' : ''} onClick={() => selectPlaylist(playlist.id)}>
+                                <Playlist key={playlist.id} className={isSelected ? 'is-selected' : ''} onClick={() => togglePlaylist(playlist.id, isSelected)}>
                                     <img src={image} alt={playlist.name} />
                                     <span>{playlist.name}</span>
                                 </Playlist>
                             )}
                         )}
                     </Column>
-                    {userPlaylists.nextUrl && <Button onClick={loadMore}>LOAD MORE...</Button>}
-                    {!!selectedPlaylistIds.length && <Button onClick={saveSelectedPlaylists}>CONTINUE</Button>}
+                    <Row>
+                        {userPlaylists.nextUrl && <Button onClick={loadMore}>LOAD MORE...</Button>}
+                        {!!selectedPlaylistIds.length && <Button onClick={saveSelectedPlaylists}>CONTINUE</Button>}
+                    </Row>
                 </>
             ) : (
                 <Button onClick={getPlaylists}>GET MY PLAYLISTS</Button>
