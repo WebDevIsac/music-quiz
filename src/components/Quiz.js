@@ -63,104 +63,18 @@ const Select = styled('div')`
     &.wrong {
         background-color: red;
     }
+
+    &.start {
+        width: 100%;
+        color: white;
+        background-color: blue;
+    }
 `;
 
 
-const App = () => {
+const App = ({ allArtists = [] }) => {
     const [artist, setArtist] = useState();
-    const [artists, setArtists] = useState([
-        'Roxette',
-        'Snowstorm ',
-        'Eminem',
-        'Niklas Strömstedt ',
-        'Madonna ',
-        'Dr. Alban',
-        'GES',
-        'Carola',
-        // 'Hooters ',
-        // 'Alice Cooper',
-        'Bryan Adams ',
-        'Rihanna ',
-        'Lillasyster',
-        'Tommy Nilsson',
-        'Magnus Uggla ',
-        'Orup ',
-        'Jakob Karlberg ',
-        'De vet du',
-        'Albatraoz ',
-        'Michael Jackson',
-        'ABBA',
-        'Queen',
-        'Toto',
-        'Train ',
-        'Maroon 5',
-        'Flo rida ',
-        'Owl City ',
-        'Jason Mraz ',
-        'Bruno Mars ',
-        'Sean Kingston ',
-        'fun.',
-        'Miley Cirus',
-        'Den svenska björnstammen',
-        'Håkan Hellström',
-        'Gyllene Tider ',
-        'Daniel Adams Ray',
-        'kent ',
-        'Ted Gärdestad',
-        'Mares ',
-        'Elvis Presley ',
-        'Beatles',
-        // 'Elton John ',
-        // 'Pink Floyd ',
-        // 'Rolling Stones ',
-        // 'Led Zeppelin',
-        // 'Mustasch',
-        'Mariah Carey ',
-        'Taylor Swift ',
-        'Whitney Houston',
-        // 'Eagles',
-        'Justin Bieber',
-        'Ed Sheeran',
-        'Kanye West',
-        // 'U2',
-        'Bruce Springsteen',
-        'Dansbandskungen',
-        'Oskar Linnros',
-        'Post Malone',
-        'Jay-Z',
-        'Rasmus Gozzi',
-        'Calvin Harris',
-        'Tove Lo',
-        'Benjamin Ingrosso',
-        'A36',
-        'Miriam Bryant',
-        'Veronica Maggio',
-        'Miss Li',
-        'Norlie & KKV',
-        'Tjuvjakt',
-        'Newkid',
-        'Hov1',
-        'Victor Leksell',
-        'Einar',
-        'Dua Lipa',
-        'The Weeknd',
-        'Broiler',
-        'Mwuana',
-        'Dani M',
-        'Kartellen',
-        'Movits!',
-        'Fricky',
-        'Yasin',
-        'Dree Low',
-        'Taylor Swift',
-        'Olivia Rodrigo',
-        'Ariana Grande',
-        'The Beatles',
-        'Shawn Mendes',
-        'Cardi B',
-        'Lov1',
-        'Thåström'
-    ]);
+    const [artists, setArtists] = useState(allArtists);
     const [points, setPoints] = useState(0);
 
     const nextArtist = () => {
@@ -179,13 +93,14 @@ const App = () => {
         setPoints(p => p + 1);
 
         nextArtist();
-    }
+    };
 
     const handleReset = () => {
         setPoints(0);
+        setArtist(null);
     };
 
-    // Add start button
+    console.log(artists);
 
     return (
         <>
@@ -199,8 +114,12 @@ const App = () => {
                 <Text>{artist}</Text>
             </TextBox>
             <SelectWrapper>
-                <Select className="wrong" onClick={nextArtist}>X</Select>
-                <Select className="correct" onClick={handleCorrect}>&#10003;</Select>
+                {!artist ? <Select className="start" onClick={nextArtist}>START</Select> : (
+                    <>
+                        <Select className="wrong" onClick={nextArtist}>X</Select>
+                        <Select className="correct" onClick={handleCorrect}>&#10003;</Select>
+                    </>
+                )}
             </SelectWrapper>
         </Wrapper>
         </>
