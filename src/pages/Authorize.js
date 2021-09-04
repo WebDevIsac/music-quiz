@@ -13,7 +13,7 @@ const Authorize = props => {
     return (
         <div>
             <div>We need you to authorize with your spotify account</div>
-            <Button onClick={authorize}>AUTHORIZE</Button>
+            <Button onClick={authorize}>LOGIN</Button>
         </div>
     )
 }

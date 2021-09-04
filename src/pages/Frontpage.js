@@ -140,7 +140,7 @@ const Frontpage = () => {
         setArtists(playlistArtists);
     }
 
-    return user?.id ? (
+    return artists.length ? <Wrapper>{artists.map(artist => <span>{artist}</span>)}</Wrapper> :  user?.id ? (
         <Wrapper>
             <h2>WELCOME {user.name}</h2>
             {userPlaylists ? (
