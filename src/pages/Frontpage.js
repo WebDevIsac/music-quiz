@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import styled from '@emotion/styled';
 import { getPlaylistArtists, getUser, getUserPlaylists, getUserPlaylistsById } from 'functions/spotify';
 import Cookies from 'js-cookie';
@@ -140,7 +141,18 @@ const Frontpage = () => {
         setArtists(playlistArtists);
     }
 
-    return artists.length ? <Wrapper>{artists.map(artist => <span>{artist}</span>)}</Wrapper> :  user?.id ? (
+    return artists.length ? (
+        <Wrapper>
+            <Column>
+                <h3>Below are all your selected artists</h3>
+                <Link to={{
+                    pathname: '/game',
+                    state: { artists }
+                }}>LETS GO!</Link>
+                {artists.map(artist => <span>{artist}</span>)}
+            </Column>
+        </Wrapper>
+    ) : user?.id ? (
         <Wrapper>
             <h2>WELCOME {user.name}</h2>
             {userPlaylists ? (
