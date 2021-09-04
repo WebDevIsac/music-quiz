@@ -101,7 +101,15 @@ export const getPlaylistArtists = async (token, playlistIds) => {
 
         const { items } = await response.json();
 
-        const artists = items.map(item => item.track?.artists?.[0]?.name).filter(i => i);
+        const artists = items
+            .map(item => item.track?.artists?.[0]?.name)
+            .reduce((acc, cur) => {
+                if (acc.every(a => a !== cur)) {
+                    return [...acc, cur];
+                }
+
+                return acc;
+            }, []);
         
         return artists;
     }));
