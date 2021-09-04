@@ -30,12 +30,24 @@ const Playlist = styled('div')`
         height: 100px;
         margin-right: 8px;
     }
+
+    &.is-selected {
+        background-color: lightblue;
+    }
+`;
+
+const Button = styled('button')`
+    width: 100%;
+    max-width: 320px;
+    height: 56px;
+    min-height: 56px;
 `;
 
 const Frontpage = () => {
     const [user, setUser] = useState();
     const [token, setToken] = useState();
     const [userPlaylists, setUserPlaylists] = useState();
+    const [selectedPlaylistIds, setSelectedPlaylistIds] = useState([]);
 
     useEffect(() => {
         const handleAuth = async (token) => {
@@ -93,7 +105,13 @@ const Frontpage = () => {
         }
     }
 
-    const hasCookie = Cookies.get('refresh-token');
+    const selectPlaylist = (id) => {
+        setSelectedPlaylistIds(playlistIds => [...playlistIds, id]);
+    }
+
+    const saveSelectedPlaylists = () => {
+        Cookies.set('playlist-ids', setSelectedPlaylistIds, { expires: 5 });
+    }
 
     return user?.id ? (
         <Wrapper>
@@ -103,18 +121,20 @@ const Frontpage = () => {
                     <Column>
                         {userPlaylists.items.map(playlist => {
                             const image = playlist.images?.[0]?.url;
+                            const isSelected = selectedPlaylistIds.some(id => id === playlist.id)
                             return (
-                                <Playlist key={playlist.id}>
+                                <Playlist key={playlist.id} className={isSelected ? 'is-selected' : ''} onClick={() => selectPlaylist(playlist.id)}>
                                     <img src={image} alt={playlist.name} />
                                     <span>{playlist.name}</span>
                                 </Playlist>
                             )}
                         )}
                     </Column>
-                    {userPlaylists.nextUrl && <button onClick={loadMore}>LOAD MORE...</button>}
+                    {userPlaylists.nextUrl && <Button onClick={loadMore}>LOAD MORE...</Button>}
+                    {!!selectedPlaylistIds.length && <Button onClick={saveSelectedPlaylists}>CONTINUE</Button>}
                 </>
             ) : (
-                <button onClick={getPlaylists}>GET MY PLAYLISTS</button>
+                <Button onClick={getPlaylists}>GET MY PLAYLISTS</Button>
             )}
         </Wrapper>
     ) : <div>LOADING...</div>;
