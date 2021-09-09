@@ -1,20 +1,21 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from '@emotion/styled';
-import { authorize} from 'functions/spotify';
+import Login from 'components/Login';
+import InfoBox from 'components/InfoBox';
 
-const Button = styled('button')`
-    width: 100%;
-    max-width: 320px;
-    height: 56px;
+const PageWrapper = styled('div')`
 `;
 
-const Authorize = props => {
+const H1 = styled('h1')`
+`;
+
+const Authorize = () => {
     return (
-        <div>
-            <div>We need you to authorize with your spotify account</div>
-            <Button onClick={authorize}>LOGIN</Button>
-        </div>
+        <PageWrapper>
+            <H1>Game of artists</H1>
+            <InfoBox />
+            <Login />
+        </PageWrapper>
     )
 }
 
