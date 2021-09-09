@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { Global, css } from '@emotion/react';
+import { Global } from '@emotion/react';
 import Frontpage from 'pages/Frontpage';
 import Game from 'pages/Game';
 import Authorize from 'pages/Authorize';
 import Authorized from 'pages/Authorized';
 import NotFound from 'pages/NotFound';
+import { globalStyle } from 'utils/styles';
 
 const Wrapper = styled('div')`
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
     flex-direction: column;
 `;
@@ -18,7 +19,7 @@ const Wrapper = styled('div')`
 const App = () => {
     return (
         <>
-            <Global styles={css`body { margin: 0; }`} />
+            <Global styles={globalStyle} />
             <Router>
                 <Wrapper>
                     <Switch>
