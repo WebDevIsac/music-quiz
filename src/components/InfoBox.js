@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 
 const Wrapper = styled('div')`
     position: relative;
+    flex: 1 1 20%;
 `;
 
 const Button = styled('button')`

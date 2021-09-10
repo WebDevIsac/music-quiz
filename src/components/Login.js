@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { authorize } from 'functions/spotify';
 
 const Column = styled('div')`
-    height: 100vh;
+    flex: 1 1 60%;
     width: 100%;
     padding: 16px;
     display: flex;
