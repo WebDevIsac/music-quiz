@@ -71,10 +71,9 @@ const Select = styled('div')`
     }
 `;
 
-
 const App = ({ allArtists = [] }) => {
     const [artist, setArtist] = useState();
-    const [artists, setArtists] = useState(allArtists);
+    const [artists, setArtists] = useState([...allArtists]);
     const [points, setPoints] = useState(0);
 
     const nextArtist = () => {
@@ -100,14 +99,13 @@ const App = ({ allArtists = [] }) => {
         setArtist(null);
     };
 
-    console.log(artists);
-
     return (
         <>
         <Global styles={css`body { margin: 0; }`} />
         <Wrapper>
             <PointsWrapper>
-                <Reset onClick={handleReset}>Börja om</Reset>
+            <span>Artists: {allArtists.length - artists.length}/{allArtists.length}</span>
+                {artist && <Reset onClick={handleReset}>Next Team</Reset>}
                 <Points>{points}</Points>
             </PointsWrapper>
             <TextBox>

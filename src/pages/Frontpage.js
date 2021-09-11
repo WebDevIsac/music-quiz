@@ -139,6 +139,7 @@ const Frontpage = () => {
 
         const playlistArtists = await getPlaylistArtists(token, selectedPlaylistIds);
         setArtists(playlistArtists);
+        window.scrollTo(0, 0);
     }
 
     return artists.length ? (
