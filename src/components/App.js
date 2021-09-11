@@ -2,12 +2,13 @@ import React, { useLayoutEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Global } from '@emotion/react';
+import { globalStyle } from 'utils/styles';
 import Frontpage from 'pages/Frontpage';
 import Game from 'pages/Game';
 import Authorize from 'pages/Authorize';
 import Authorized from 'pages/Authorized';
 import NotFound from 'pages/NotFound';
-import { globalStyle } from 'utils/styles';
+import CustomSelection from 'pages/CustomSelection';
 
 const Wrapper = styled('div')`
     width: 100%;
@@ -52,6 +53,9 @@ const App = () => {
                         </Route>
                         <Route path="/authorized">
                             <Authorized />
+                        </Route>
+                        <Route path="/custom-selection">
+                            <CustomSelection />
                         </Route>
                         <Route path="*">
                             <NotFound />

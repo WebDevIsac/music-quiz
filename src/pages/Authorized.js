@@ -1,13 +1,21 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import styled from '@emotion/styled';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { getToken } from 'functions/spotify';
 import { getParamCode } from 'functions/utils';
 
-const Authorized = props => {
+const PageWrapper = styled('div')`
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Authorized = () => {
     const location = useLocation();
+    const history = useHistory();
     
     useEffect(() => {
         const handleCheck = async () => {
@@ -21,7 +29,7 @@ const Authorized = props => {
                     Cookies.set('access-token', accessToken, { expires: in1Hour });
                     Cookies.set('refresh-token', refreshToken, { expires: 5 });
 
-                    window.location.href = window.location.origin;
+                    history.push('/');
                 }
             }
 
@@ -32,9 +40,9 @@ const Authorized = props => {
     }, [location]);
 
     return (
-        <div>
+        <PageWrapper>
             LOADING...
-        </div>
+        </PageWrapper>
     )
 }
 

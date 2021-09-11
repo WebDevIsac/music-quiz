@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 import { authorize } from 'functions/spotify';
 
 const Column = styled('div')`
@@ -25,9 +26,9 @@ const Button = styled('button')`
     border: none;
     border-radius: 25px;
     height: 56px;
-    width: 80%;
-    max-width: 320px;
+    width: 320px;
     font-size: 16px;
+    cursor: pointer;
 `;
 
 const Login = () => {
@@ -36,7 +37,9 @@ const Login = () => {
             <Span>Login with your Spotify account</Span>
             <Button onClick={authorize}>LOGIN</Button>
             <Span>Or...</Span>
-            <Button onClick={authorize}>SELECT ARTISTS</Button>
+            <Link to="/custom-selection">
+                <Button>SELECT ARTISTS</Button>
+            </Link>
         </Column>
     );
 };
