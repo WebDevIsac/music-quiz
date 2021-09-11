@@ -104,7 +104,7 @@ const App = ({ allArtists = [] }) => {
         <Global styles={css`body { margin: 0; }`} />
         <Wrapper>
             <PointsWrapper>
-            <span>Artists: {allArtists.length - artists.length}/{allArtists.length}</span>
+            <span>Artist: {allArtists.length - artists.length}/{allArtists.length}</span>
                 {artist && <Reset onClick={handleReset}>Next Team</Reset>}
                 <Points>{points}</Points>
             </PointsWrapper>

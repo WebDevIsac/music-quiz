@@ -51,14 +51,40 @@ const Playlist = styled('div')`
 `;
 
 const Button = styled('button')`
-    width: 100%;
+    color: white;
+    background-color: darkseagreen;
+    border: none;
+    border-radius: 25px;
     height: 56px;
-    min-height: 56px;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
     flex: 1 1 auto;
-
+    
     & + button {
         margin-left: 8px;
     }
+`;
+
+const Artist = styled('div')`
+    &:first-of-type {
+        margin-top: 32px;
+    }
+
+    margin-bottom: 8px;
+
+    &:last-of-type {
+        margin-bottom: 32px;
+    }
+`;
+
+const LoadingContainer = styled('div')`
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Frontpage = () => {
@@ -145,17 +171,26 @@ const Frontpage = () => {
     return artists.length ? (
         <Wrapper>
             <Column>
-                <h3>Below are all your selected artists</h3>
+                <h4>BELOW ARE YOUR SELECTED ARTISTS</h4>
                 <Link to={{
                     pathname: '/game',
                     state: { artists }
-                }}>LETS GO!</Link>
-                {artists.map(artist => <span>{artist}</span>)}
+                }}>
+                    <Button>LETS GO!</Button>
+                </Link>
+                {artists.map(artist => <Artist>{artist}</Artist>)}
+                <Link to={{
+                    pathname: '/game',
+                    state: { artists }
+                }}>
+                    <Button>LETS GO!</Button>
+                </Link>
             </Column>
         </Wrapper>
     ) : user?.id ? (
         <Wrapper>
-            <h2>WELCOME {user.name}</h2>
+            <h2>WELCOME</h2>
+            <h2>{user.name}</h2>
             {userPlaylists ? (
                 <>
                     <Column>
@@ -179,7 +214,9 @@ const Frontpage = () => {
                 <Button onClick={getPlaylists}>GET MY PLAYLISTS</Button>
             )}
         </Wrapper>
-    ) : <div>LOADING...</div>;
+    ) : (
+        <LoadingContainer>LOADING...</LoadingContainer>
+    );
 }
 
 Frontpage.propTypes = {
